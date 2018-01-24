@@ -60,9 +60,11 @@
         0 <= colIndex && colIndex < this.get('n')
       );
     },
-
-
-/*
+    
+    
+    
+    
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,13 +81,30 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var row = this.get(rowIndex);
+      // count variable to hold count of 1s
+      var count = 0;
+      // iterate through array and increase count by 1 if item = 1
+      for (var i = 0; i < row.length; i++) {
+        if (row[i] === 1) {
+          count++;
+        }
+      }
+      // // return whether count > 1
+      return count > 1; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var size = this.get('n');
+      for (var i = 0; i < size; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
+
 
 
 
