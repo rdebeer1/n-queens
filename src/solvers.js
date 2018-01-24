@@ -13,30 +13,42 @@
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
-
+window.loops = function(board, firstRow, rows, cb) {
+  if (firstRow === rows) {
+    return cb(board); 
+  }
+  for (var i = 0; i < rows; i++) {
+    board.togglePiece(firstRow, i);
+    if (!board.hasAnyRooksConflicts()) {
+      var result = loops(board, firstRow + 1, rows, cb);
+      if (result) {
+        return result;
+      }
+    }
+    board.togglePiece(firstRow, i);
+  }
+};
 
 window.findNRooksSolution = function(n) {
-  var solution = []; //fixme
-  for (var i = 0; i < n; i++) {
-    // create an array for each row
-    var row = [];
-    // push n 0s to each row
-    for (var j = 0; j < n; j++) {
-      row.push(0);
-    }
-    // set row[row number] = 1
-    row[i] = 1;
-    // add row to solution array
-    solution.push(row);
-  }
-
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  var solution; 
+  var board = new Board({n: n});
+  
+  loops(board, 0, n, function(board) {
+    return solution = board.rows();
+  });
+  
+  console.log('Single solution for ' + n + ' rooks: ', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; 
+  var board = new Board({n: n});
+  
+  loops(board, 0, n, function(board) {
+    solutionCount++;
+  });
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
